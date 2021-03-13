@@ -11,7 +11,7 @@ from Products
 where Discontinued = 0
 
 --3. What is the cost after discount for each order?  Discounts should be applied as a percentage off.
-select o.OrderID, sum(od.UnitPrice * od.Quantity * (1-discount)) SalesTotal
+select o.OrderID, sum(od.UnitPrice * od.Quantity * (1-od.Discount)) SalesTotal
 from Orders o
 	join [Order Details] od
 	on o.OrderID = od.OrderID
@@ -19,7 +19,7 @@ group by o.OrderID
 order by SalesTotal desc
 
 --4. I need a list of sales figures broken down by category name.  Include the total $ amount sold over all time and the total number of items sold.
-select c.CategoryName, sum(od.UnitPrice * od.Quantity * (1-discount)) SalesTotal, sum(od.Quantity)Quantity
+select c.CategoryName, sum(od.UnitPrice * od.Quantity * (1-od.Discount)) SalesTotal, sum(od.Quantity)Quantity
 from [Order Details] od
 	join Products p
 	on od.ProductID = p.ProductID
@@ -35,7 +35,7 @@ group by ProductName, UnitPrice
 order by UnitPrice Desc
 
 --6. In which quarter in 1997 did we have the most revenue?
-select top 1 datepart(qq, o.OrderDate) theQuarter, sum(od.UnitPrice * od.Quantity * (1-discount)) SalesTotal
+select top 1 datepart(qq, o.OrderDate) theQuarter, sum(od.UnitPrice * od.Quantity * (1-od.Discount)) SalesTotal
 from orders o
 	join [Order Details] od
 	on o.OrderID = od.OrderID
